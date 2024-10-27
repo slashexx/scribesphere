@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # FRONTEND
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setting up node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'latest'
+
+      - name: Installing dependencies
+        run: |
+          cd scribesphere
+          npm install
+
+      - name: Running tests
+        run: |
+          cd scribesphere
+          npm test
+
+  # BACKEND
+  backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setting up golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.20'
+
+      - name: Installing dependencies for mod
+        run: |
+          cd backend
+          go mod download
+
+      - name: Run Go tests
+        run: |
+          cd backend
+          go test ./...
