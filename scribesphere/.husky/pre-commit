@@ -1,6 +1,10 @@
 # .husky/pre-commit
+
+# FRONTEND
 npm run test
-cd ../../backend/
+
+
+# BACKEND
+cd ../../backend
 go fmt ./...
 go vet ./...
-git update-index --again
