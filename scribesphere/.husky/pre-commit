@@ -1,6 +1,5 @@
 # .husky/pre-commit
 npm run test
-
 cd ../../backend/
 go fmt ./...
 go vet ./...
