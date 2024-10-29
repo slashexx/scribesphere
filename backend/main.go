@@ -1,10 +1,9 @@
 package main
 
 import (
-	"context" 
-	"log"
-	"net/http"
+	"context"
 	"github.com/graphql-go/handler"
+	"net/http"
 	firestore "scribesphere-backend/firestore"
 )
 

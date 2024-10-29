@@ -1,10 +1,10 @@
 # .husky/pre-commit
 
 # FRONTEND
-npm run test
-
+cd frontend
+npm run test || exit 1
 
 # BACKEND
-cd ../../backend
-go fmt ./...
-go vet ./...
+cd ../backend
+go fmt ./... || exit 1
+go vet ./... || exit 1
