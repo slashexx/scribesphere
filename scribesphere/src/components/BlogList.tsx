@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Search, Filter, BookOpen } from 'lucide-react';
 
 // This will be replaced with Firebase data later
