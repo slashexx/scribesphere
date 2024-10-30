@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"scribesphere/models"
-	"fmt"
 )
 
 func CreatePost(w http.ResponseWriter, r *http.Request) {

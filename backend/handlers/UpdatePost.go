@@ -1,11 +1,10 @@
 package handlers
 
 import (
-	"scribesphere/models"
 	"encoding/json"
 	"net/http"
+	"scribesphere/models"
 )
-
 
 func UpdatePost(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Path[len("/post/"):]
@@ -23,4 +22,3 @@ func UpdatePost(w http.ResponseWriter, r *http.Request) {
 
 	http.Error(w, "Post not found", http.StatusNotFound)
 }
-
