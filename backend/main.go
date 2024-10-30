@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"scribesphere/handlers"
@@ -21,7 +20,7 @@ func main() {
 		case "GET":
 			handlers.GetAllPosts(w, r)
 		case "POST":
-			createPost(w, r)
+			handlers.CreatePost(w, r)
 		default:
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
@@ -33,10 +32,10 @@ func main() {
 			handlers.GetPost(w, r)
 			break
 		case "PUT":
-			updatePost(w, r)
+			handlers.UpdatePost(w, r)
 			break
 		case "DELETE":
-			deletePost(w, r)
+			handlers.DeletePost(w, r)
 
 		default:
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -49,42 +48,5 @@ func main() {
 
 }
 
-func createPost(w http.ResponseWriter, r *http.Request) {
-	var newPost models.BlogPost
-	json.NewDecoder(r.Body).Decode(&newPost)
-	newPost.ID = fmt.Sprintf("%d", len(posts)+1)
-	posts = append(posts, newPost)
-	w.WriteHeader(http.StatusCreated)
 
-	json.NewEncoder(w).Encode(newPost)
-}
 
-func updatePost(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Path[len("/post/"):]
-
-	var updatedPost models.BlogPost
-	json.NewDecoder(r.Body).Decode(&updatedPost)
-
-	for i, post := range posts {
-		if post.ID == id {
-			posts[i] = updatedPost
-			json.NewEncoder(w).Encode(posts[i])
-			return
-		}
-	}
-
-	http.Error(w, "Post not found", http.StatusNotFound)
-}
-
-func deletePost(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Path[len("/post/"):]
-
-	for i, post := range posts {
-		if post.ID == id {
-			posts = append(posts[:i], posts[i+1:]...)
-			w.WriteHeader(http.StatusNoContent)
-		}
-	}
-
-	http.Error(w, "Post to be deleted not found", http.StatusNotFound)
-}

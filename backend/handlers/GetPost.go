@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	// "scribesphere/models"
-	
 )
 
 func GetPost(w http.ResponseWriter, r *http.Request) {
