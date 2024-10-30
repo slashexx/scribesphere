@@ -6,22 +6,41 @@ import (
 	"net/http"
 )
 
-type BlogPost struct {
-	ID      string "json:id"
-	Title   string "json:title"
-	Content string "json:content"
-	Author  string "json:author"
-}
 
 var posts []BlogPost
 
 func main() {
 
-	var w http.ResponseWriter
-	var r *http.Request
+	http.HandleFunc("/", func(written http.ResponseWriter, req *http.Request) {
+		fmt.Fprintf(written, "Hello my niggas, checkout urls posts and post/id")
+	})
 
-	http.HandleFunc("/", func(w, r) {
-		fmt.Fprintf(w, "Hello my niggas, checkout urls posts and post/id")
+	http.HandleFunc("/posts", func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case "GET":
+			GetAllPosts(w, r)
+		case "POST":
+			createPost(w, r)
+		default:
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	})
+
+	http.HandleFunc("/post/", func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case "GET":
+			getPost(w, r)
+			break
+		case "PUT":
+			updatePost(w, r)
+			break
+		case "DELETE":
+			deletePost(w, r)
+
+		default:
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+
+		}
 	})
 
 	fmt.Print("The server is now listening at port : 8080 (http://localhost:8080)")
@@ -29,14 +48,10 @@ func main() {
 
 }
 
-func getAllPosts(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(posts)
-}
 
-func getPost(w http.ResponseWriter, r *http.Request){
+func getPost(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Path[len("/post/"):]
-	for i := range len(posts){
+	for i := 0; i < len(posts); i++ {
 		if posts[i].ID == id {
 			json.NewEncoder(w).Encode(posts[i])
 			return
@@ -49,7 +64,7 @@ func getPost(w http.ResponseWriter, r *http.Request){
 func createPost(w http.ResponseWriter, r *http.Request) {
 	var newPost BlogPost
 	json.NewDecoder(r.Body).Decode(&newPost)
-	newPost.ID = fmt.Sprint("%d", len(posts)+1)
+	newPost.ID = fmt.Sprintf("%d", len(posts)+1)
 	posts = append(posts, newPost)
 	w.WriteHeader(http.StatusCreated)
 
@@ -57,7 +72,7 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func updatePost(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Path[len("/posts/"):]
+	id := r.URL.Path[len("/post/"):]
 
 	var updatedPost BlogPost
 	json.NewDecoder(r.Body).Decode(&updatedPost)
@@ -74,7 +89,7 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func deletePost(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Path[len("/posts/"):]
+	id := r.URL.Path[len("/post/"):]
 
 	for i, post := range posts {
 		if post.ID == id {
