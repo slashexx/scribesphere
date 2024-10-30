@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"scribesphere/handlers"
+	"scribesphere/models"
 )
 
 
-var posts []BlogPost
+var posts []models.BlogPost
 
 func main() {
 
@@ -18,7 +20,7 @@ func main() {
 	http.HandleFunc("/posts", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case "GET":
-			GetAllPosts(w, r)
+			handlers.GetAllPosts(w, r)
 		case "POST":
 			createPost(w, r)
 		default:
