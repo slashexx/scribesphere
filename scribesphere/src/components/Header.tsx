@@ -8,7 +8,7 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <BookOpen className="h-8 w-8 text-teal-600" />
-            <span className="text-2xl font-bold text-slate-800">BlogVerse</span>
+            <span className="text-2xl font-bold text-slate-800">ScribeSphere</span>
           </div>
           <div className="flex items-center space-x-6">
             <div className="relative hidden md:block">
