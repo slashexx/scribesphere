@@ -17,8 +17,11 @@ var posts []BlogPost
 
 func main() {
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello my niggas")
+	var w http.ResponseWriter
+	var r *http.Request
+
+	http.HandleFunc("/", func(w, r) {
+		fmt.Fprintf(w, "Hello my niggas, checkout urls posts and post/id")
 	})
 
 	fmt.Print("The server is now listening at port : 8080 (http://localhost:8080)")
