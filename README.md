@@ -1,6 +1,3 @@
-Here’s a simplified README for your personal Scribesphere project in Markdown format:
-
-```markdown
 # Scribesphere
 
 Scribesphere is a personal blogging platform that allows users to create, read, update, and delete blog posts. It features a Go backend for the API and a React frontend for user interaction.
@@ -55,5 +52,3 @@ Scribesphere is a personal blogging platform that allows users to create, read, 
 - **GET /post/{id}**: Retrieve a blog post by ID.
 - **PUT /post/{id}**: Update a blog post by ID.
 - **DELETE /post/{id}**: Delete a blog post by ID.
-
-```
