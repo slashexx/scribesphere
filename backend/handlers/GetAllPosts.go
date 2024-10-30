@@ -6,7 +6,7 @@ import (
 	"scribesphere/models"
 )
 
-var posts []models.BlogPost 
+var posts []models.BlogPost
 
 // GetAllPosts handles the GET request to retrieve all blog posts.
 func GetAllPosts(w http.ResponseWriter, r *http.Request) {

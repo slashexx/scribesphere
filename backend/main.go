@@ -8,7 +8,6 @@ import (
 	"scribesphere/models"
 )
 
-
 var posts []models.BlogPost
 
 func main() {
@@ -31,7 +30,7 @@ func main() {
 	http.HandleFunc("/post/", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case "GET":
-			getPost(w, r)
+			handlers.GetPost(w, r)
 			break
 		case "PUT":
 			updatePost(w, r)
@@ -50,21 +49,8 @@ func main() {
 
 }
 
-
-func getPost(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Path[len("/post/"):]
-	for i := 0; i < len(posts); i++ {
-		if posts[i].ID == id {
-			json.NewEncoder(w).Encode(posts[i])
-			return
-		}
-	}
-
-	http.Error(w, "Specified post does not exist", http.StatusNotFound)
-}
-
 func createPost(w http.ResponseWriter, r *http.Request) {
-	var newPost BlogPost
+	var newPost models.BlogPost
 	json.NewDecoder(r.Body).Decode(&newPost)
 	newPost.ID = fmt.Sprintf("%d", len(posts)+1)
 	posts = append(posts, newPost)
@@ -76,7 +62,7 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 func updatePost(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Path[len("/post/"):]
 
-	var updatedPost BlogPost
+	var updatedPost models.BlogPost
 	json.NewDecoder(r.Body).Decode(&updatedPost)
 
 	for i, post := range posts {
