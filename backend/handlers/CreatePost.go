@@ -1,35 +1,43 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	"log"
+
+	// "encoding/json"
+	// "log"
 	"net/http"
-	"scribesphere/models"
 	"scribesphere/firebaseSetup"
+	"scribesphere/models"
 )
 
-func CreatePost(w http.ResponseWriter, r *http.Request) {
-	var newPost models.BlogPost
+func CreatePost(w http.ResponseWriter, r *http.Request) error {
+	ctx := context.Background()
 
-	// Decode the JSON request body into the newPost struct
-	if err := json.NewDecoder(r.Body).Decode(&newPost); err != nil {
-		http.Error(w, "Failed to decode JSON", http.StatusBadRequest)
-		return
-	}
+	fmt.Println("Reached the createpost function")
+	client, err := firebaseSetup.InitializeFirebase().Firestore(ctx)
 
-	// Add the new post to Firestore
-	ctx := r.Context() // Use the request context
-	_, _, err := firebaseSetup.Client.Collection("posts").Add(ctx, newPost)
 	if err != nil {
-		log.Printf("Failed adding post: %v", err) // Log the error without terminating the server
-		http.Error(w, "Failed to create post", http.StatusInternalServerError)
-		return
+		log.Fatalf("Firebase initialization error: %v", err)
+		return err
 	}
 
-	// Send the response back to the client
-	w.WriteHeader(http.StatusCreated)
-	if err := json.NewEncoder(w).Encode(newPost); err != nil {
-		log.Printf("Failed to send response: %v", err) // Log the error without terminating the server
-		http.Error(w, "Failed to send response", http.StatusInternalServerError)
+	defer client.Close()
+
+	var post models.BlogPost
+	json.NewDecoder(r.Body).Decode(&post)
+
+	fmt.Println(post)
+
+	_, err2 := client.Collection("posts").NewDoc().Create(ctx, post)
+
+	if err2 != nil {
+		fmt.Println("Error writing to firestore : ")
+		// fmt.Println(err2)
+		log.Fatalln(err2)
 	}
+
+	return err2
 }
