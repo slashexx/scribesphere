@@ -35,7 +35,6 @@ func CreatePost(w http.ResponseWriter, r *http.Request) error {
 
 	if err2 != nil {
 		fmt.Println("Error writing to firestore : ")
-		// fmt.Println(err2)
 		log.Fatalln(err2)
 	}
 
